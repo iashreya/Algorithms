@@ -15,7 +15,7 @@ for i in range(n):
 for i in range(n):
     for j in range(n):
         if j<i:
-	    dist[i][j] = dist[j][i]
+            dist[i][j] = dist[j][i]
 
 print("Printing the distance matrix:\n")
 print(dist)
@@ -112,51 +112,51 @@ class Individual():
 
 
 def main():
-	global POPULATION_SIZE
-	global cities
-	generation = 1
- 	found = False
+		global POPULATION_SIZE
+		global cities
+		generation = 1
+		found = False
 
-	population = [ Individual(Individual.create_gnome()) for _ in range(POPULATION_SIZE)]
+		population = [ Individual(Individual.create_gnome()) for _ in range(POPULATION_SIZE)]
 	
-	while not found:
-		population = sorted(population, key = lambda x : x.fitness)
+		while not found:
+				population = sorted(population, key = lambda x : x.fitness)
 
-		if population[0].path_length <= 200 or generation == 1000:
-			found = True
-			break
+				if population[0].path_length <= 200 or generation == 1000:
+						found = True
+						break
 
-		new_generation = []
-		s = int((10*POPULATION_SIZE)/100)
-		new_generation.extend(population[:s])
+				new_generation = []
+				s = int((10*POPULATION_SIZE)/100)
+				new_generation.extend(population[:s])
 
-		s = int((90*POPULATION_SIZE)/100)
-		for _ in range(s):
-			par1, par2 = Individual.selection(population), Individual.selection(population)
-			child = par1.mate(par2)
-			child.mutation()
-			new_generation.append(child)
+				s = int((90*POPULATION_SIZE)/100)
+				for _ in range(s):
+						par1, par2 = Individual.selection(population), Individual.selection(population)
+						child = par1.mate(par2)
+						child.mutation()
+						new_generation.append(child)
 
-		population = new_generation
+				population = new_generation
 
-		print("Generation: {}\tPath: {}\tPath_Length: {}".format(generation, population[0].chromosome, population[0].path_length))
+				print("Generation: {}\tPath: {}\tPath_Length: {}".format(generation, population[0].chromosome, population[0].path_length))
+				generation +=1
+
+		print("Generation: {}\tPath: {}\tPath_length: {}".format(generation, population[0].chromosome, population[0].path_length))
+
 		generation +=1
-
-	print("Generation: {}\tPath: {}\tPath_length: {}".format(generation, population[0].chromosome, population[0].path_length))
-
-	generation +=1
 
 
 
 average_time = []
 
 if __name__ == "__main__":
-	s = time.clock()
-	main()
-	average_time.append(time.clock()-s)
-	print(time.clock()-s)
+		s = time.clock()
+		main()
+		average_time.append(time.clock()-s)
+		print(time.clock()-s)
 
-
+		print("Time taken: ",sum(average_time)/len(average_time))
 
 
 
