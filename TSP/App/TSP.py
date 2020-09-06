@@ -1,4 +1,4 @@
-print("Starting the TST optimization program...\n\n")
+print("Starting the TSP optimization program...\n\n")
 
 import numpy as np
 import random
@@ -7,6 +7,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import os
 
+'''
 ### Generating n random cities and distances between them
 n = 10
 dist = np.array([random.sample(range(n**2), n**2)])
@@ -29,16 +30,17 @@ cities = [ i for i in range(n) ]
 ### POPULATION_SIZE is the number of random solutions samples we
 ### want our solution to start with.
 POPULATION_SIZE = 300
+'''
 
 class Individual():
 	
-	def __init__(self, chromosome):
+	def __init__(self, chromosome, dist):
 		self.chromosome = chromosome
-		self.path_length = self.cal_path_length()
+		self.path_length = self.cal_path_length(dist)
 		self.fitness = self.cal_fitness()
 
 	@classmethod
-	def create_gnome(self):
+	def create_gnome(self, cities):
 		gnome = []
 		temp = [ i for i in cities ]
 		for i in cities:
@@ -48,7 +50,7 @@ class Individual():
 		return(gnome)
 
 	
-	def mate(self, par2):
+	def mate(self, par2, n, dist):
 		#Replace the hard-coded values here with something generic
 		x_part = 3
 		y_part = 6
@@ -75,10 +77,9 @@ class Individual():
 				while temp1 in t2 or temp1 in child1:
 					temp1 = random.choice(t1)
 				child1.append(temp1)
-		return (Individual(child1))
+		return (Individual(child1, dist))
 
-	def mutation(self):
-		global cities
+	def mutation(self, cities):
 		prob = random.random()
 		mutation_rate = 0.4
 		if prob < mutation_rate:
@@ -91,7 +92,7 @@ class Individual():
 	def cal_fitness(self):
 		return (self.path_length)**2
 
-	def cal_path_length(self):
+	def cal_path_length(self, dist):
 		path = 0
 		length = len(self.chromosome)
 		for i in range(length-1):
@@ -114,13 +115,15 @@ class Individual():
 
 
 
-def main():
+def main(n, cities, POPULATION_SIZE, dist):
+		'''
 		global POPULATION_SIZE
 		global cities
+		'''
 		generation = 1
 		found = False
 
-		population = [ Individual(Individual.create_gnome()) for _ in range(POPULATION_SIZE)]
+		population = [ Individual(Individual.create_gnome(cities), dist) for _ in range(POPULATION_SIZE)]
 	
 		while not found:
 				population = sorted(population, key = lambda x : x.fitness)
@@ -136,8 +139,8 @@ def main():
 				s = int((90*POPULATION_SIZE)/100)
 				for _ in range(s):
 						par1, par2 = Individual.selection(population), Individual.selection(population)
-						child = par1.mate(par2)
-						child.mutation()
+						child = par1.mate(par2, n, dist)
+						child.mutation(cities)
 						new_generation.append(child)
 
 				population = new_generation
@@ -155,10 +158,32 @@ def main():
 		
 		return results
 		
-def run():
+def run(n=10):
+		dist = np.array([random.sample(range(n**2), n**2)])
+		dist = dist.reshape(n, n)
+
+		for i in range(n):
+				dist[i][i] = 0
+			 
+		for i in range(n):
+				for j in range(n):
+				    if j<i:
+				        dist[i][j] = dist[j][i]
+
+		print("Printing the distance matrix:\n")
+		print(dist)
+
+		### Declaring cities indexed from 0 to n-1
+		cities = [ i for i in range(n) ]
+
+		### POPULATION_SIZE is the number of random solutions samples we
+		### want our solution to start with.
+		POPULATION_SIZE = 300
+
+
 		average_time = []
 		s = time.clock()
-		results = main()
+		results = main(n, cities, POPULATION_SIZE, dist)
 		average_time.append(time.clock()-s)
 		
 		G = nx.Graph()
