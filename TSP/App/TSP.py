@@ -158,7 +158,7 @@ def main(n, cities, POPULATION_SIZE, dist):
 		
 		return results
 		
-def run(n=10):
+def run(n):
 		dist = np.array([random.sample(range(n**2), n**2)])
 		dist = dist.reshape(n, n)
 

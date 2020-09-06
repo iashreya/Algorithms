@@ -1,11 +1,12 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 from TSP import run
 
 app = Flask(__name__)
 
-@app.route('/')
-@app.route('/<int:n>')
-def hello_world(n = 10):
+@app.route('/', methods=['GET', 'POST'])
+def hello_world(n=5):
+		
+		print("Value of n: ",n)
 		res = run(n)
 		path = str(res["path"])
 		time_taken = str(res["time_taken"])
