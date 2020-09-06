@@ -3,6 +3,9 @@ print("Starting the TST optimization program...\n\n")
 import numpy as np
 import random
 import time
+import networkx as nx
+import matplotlib.pyplot as plt
+import os
 
 ### Generating n random cities and distances between them
 n = 10
@@ -157,6 +160,19 @@ def run():
 		s = time.clock()
 		results = main()
 		average_time.append(time.clock()-s)
+		
+		G = nx.Graph()
+		for i in range(n):
+				for j in range(i+1, n):
+						G.add_edge(i, j)
+						G[i][j]['weight'] = dist[i][j]
+						
+						
+		
+		nx.draw(G, with_labels=True, font_weight='bold', font_size='large', font_color="yellow", node_color="blue")
+		plt.savefig("static/graph.jpg")
+		plt.clf()
+		
 		
 		print("Time taken: {}".format(round(sum(average_time)/len(average_time), 3)))
 		
