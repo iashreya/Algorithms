@@ -107,13 +107,20 @@ class BST:
                         currentNode = None
                         return True
         
+    def height(self, node):
+        if node!=None:
+            l = height(node.left) + 1
+            r = height(node.right) + 1
+
+            if l>r:
+                return l
+            else:
+                return r
+        else:
+            return 0
                     
-    
     def traverse(self, node):
         if node!=None:
             self.traverse(node.left)
             print(node.data)
             self.traverse(node.right)
-            
-            
-
