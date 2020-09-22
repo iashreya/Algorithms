@@ -162,3 +162,24 @@ class BST:
 
         return fun(tree.root)
 
+    
+    def path(self, node, val):
+        path = []
+        def pathToNode(node, val):
+            if node!=None:
+                if node.data == val:
+                    return True
+                else:
+                    if pathToNode(node.left, val):
+                        path.append(node.left.data)
+                        return True
+                    if pathToNode(node.right, val):
+                        path.append(node.right.data)
+                        return True
+            else:
+                return False
+
+        pathToNode(node, val)
+        path.append(node.data)
+        path.reverse()
+        return path
