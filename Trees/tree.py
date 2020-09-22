@@ -3,7 +3,7 @@ class Node:
         self.data = data
         self.left = None
         self.right = None        
-        
+
 class BST:
     def __init__(self, root=None):
         self.root = root
@@ -140,3 +140,25 @@ class BST:
                 stack.append(temp.right)
 
         return ans
+    
+    def topView(self, node):
+        levelOrder = tree.BFS(node)
+        cache = {}
+
+        def fun(node, level=0):
+            if node!=None:
+                if level not in cache:
+                    cache[level] = node.data
+                else:
+                    if levelOrder.index(node.data)<levelOrder.index(cache[level]):
+                        cache[level] = node.data
+
+                fun(node.left, level-1)
+                fun(node.right, level+1)
+
+            sorted_horizontal_distances = sorted(cache)
+            ans = [cache[i] for i in sorted_horizontal_distances]
+            return ans
+
+        return fun(tree.root)
+
