@@ -124,3 +124,19 @@ class BST:
             self.traverse(node.left)
             print(node.data)
             self.traverse(node.right)
+            
+    def BFS(self, node):
+        stack = [node]
+        ans = []
+
+        while(stack!=[]):
+            temp = stack[0]
+            del stack[0]
+            ans.append(temp.data)
+
+            if temp.left!=None:
+                stack.append(temp.left)    
+            if temp.right!=None:
+                stack.append(temp.right)
+
+        return ans
