@@ -109,8 +109,8 @@ class BST:
         
     def height(self, node):
         if node!=None:
-            l = height(node.left) + 1
-            r = height(node.right) + 1
+            l = self.height(node.left) + 1
+            r = self.height(node.right) + 1
 
             if l>r:
                 return l
